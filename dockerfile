@@ -1,8 +1,11 @@
 # TODO: Step 1 - Use an official Python runtime as a parent image. You can use `python:3.8-slim`.
+FROM python:3.8-slim
 
 # TODO: Step 2 - Set the working directory in the container
+WORKDIR /app
 
 # TODO: Step 3 Copy the application files in the container
+COPY . /app
 
 # Install system dependencies and ODBC driver
 RUN apt-get update && apt-get install -y \
@@ -20,7 +23,10 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --upgrade pip setuptools
 
 # TODO: Step 4 - Install Python packages specified in requirements.txt
+RUN pip install flask==2.2.2 pyodbc==4.0.39 SQLAlchemy==2.0.21 werkzeug==2.2.3
 
-# TODO: Step 5 - Expose port 
+# TODO: Step 5 - Expose port
+EXPOSE 5000 
 
 # TODO: Step 6 - Define Startup Command
+CMD ["python", "app.py"]
