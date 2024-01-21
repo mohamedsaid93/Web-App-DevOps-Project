@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --upgrade pip setuptools
 
 # TODO: Step 4 - Install Python packages specified in requirements.txt
-RUN pip install flask==2.2.2 pyodbc==4.0.39 SQLAlchemy==2.0.21 werkzeug==2.2.3
+RUN pip install flask==2.2.2 pyodbc==4.0.39 SQLAlchemy==2.0.21 werkzeug==2.2.3 azure-identity azure-keyvault-secrets
 
 # TODO: Step 5 - Expose port
 EXPOSE 5000 
