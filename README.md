@@ -10,53 +10,75 @@ Welcome to the Web App DevOps Project repo! This application allows you to effic
 - [Contributors](#contributors)
 - [License](#license)
 
-## Features
 
-- **Order List:** View a comprehensive list of orders including details like date UUID, user ID, card number, store code, product code, product quantity, order date, and shipping date.
-  
-![Screenshot 2023-08-31 at 15 48 48](https://github.com/maya-a-iuga/Web-App-DevOps-Project/assets/104773240/3a3bae88-9224-4755-bf62-567beb7bf692)
+## Containerisation with Docker
+### Containerisation with Docker:
+##### Step 1: Base Image Selection
+Use an official Python runtime as the parent image. For example:
 
-- **Pagination:** Easily navigate through multiple pages of orders using the built-in pagination feature.
-  
-![Screenshot 2023-08-31 at 15 49 08](https://github.com/maya-a-iuga/Web-App-DevOps-Project/assets/104773240/d92a045d-b568-4695-b2b9-986874b4ed5a)
+    FROM python:3.8-slim
+    
+   for M1/M2 chip Mac
 
-- **Add New Order:** Fill out a user-friendly form to add new orders to the system with necessary information.
-  
-![Screenshot 2023-08-31 at 15 49 26](https://github.com/maya-a-iuga/Web-App-DevOps-Project/assets/104773240/83236d79-6212-4fc3-afa3-3cee88354b1a)
+    FROM --platform=linux/amd64 public.ecr.aws/docker/library/python:3.9.10-slim-buster
 
-- **Data Validation:** Ensure data accuracy and completeness with required fields, date restrictions, and card number validation.
+##### Step 2: Set Working Directory
+Set the working directory in the container to /app:
 
-## Getting Started
+    WORKDIR /app
 
-### Prerequisites
+##### Step 3: Copy Application Files
+Copy the contents of the local directory into the container's /app directory:
 
-For the application to succesfully run, you need to install the following packages:
+    COPY . /app
 
-- flask (version 2.2.2)
-- pyodbc (version 4.0.39)
-- SQLAlchemy (version 2.0.21)
-- werkzeug (version 2.2.3)
+##### Step 4: Install Python Packages
 
-### Usage
+Install Python packages specified in requirements.txt:
 
-To run the application, you simply need to run the `app.py` script in this repository. Once the application starts you should be able to access it locally at `http://127.0.0.1:5000`. Here you will be meet with the following two pages:
+    RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-1. **Order List Page:** Navigate to the "Order List" page to view all existing orders. Use the pagination controls to navigate between pages.
+##### Step 5: Expose Port
 
-2. **Add New Order Page:** Click on the "Add New Order" tab to access the order form. Complete all required fields and ensure that your entries meet the specified criteria.
+Expose port 5000 to make the Flask application accessible:
 
-## Technology Stack
+    EXPOSE 5000
+    
+##### Step 6: Define Startup Command
+Specify the command to be executed when the container launches:
 
-- **Backend:** Flask is used to build the backend of the application, handling routing, data processing, and interactions with the database.
+    CMD ["python", "app.py"]
 
-- **Frontend:** The user interface is designed using HTML, CSS, and JavaScript to ensure a smooth and intuitive user experience.
 
-- **Database:** The application employs an Azure SQL Database as its database system to store order-related data.
+### Docker Commands Documentation:
+##### To build docker image, run the following:
 
-## Contributors 
+    docker build -t <name-of-the-image> .
 
-- [Maya Iuga]([https://github.com/yourusername](https://github.com/maya-a-iuga))
+##### To run docker container with mapping port 5000 from the local machine to the container, run the following:
 
-## License
+    docker run -p 5000:5000 <name-of-the-image>
 
-This project is licensed under the MIT License. For more details, refer to the [LICENSE](LICENSE) file.
+##### To tag docker image, run the following:
+
+    docker tag <name-of-the-image> <docker-hub-username>/<image-name>:<tag>
+
+##### To push docker image to docker hub, run the following:
+
+    docker push <docker-hub-username>/<image-name>:<tag>
+
+### Image Information Documentation
+
+**Image Name:**
+`kubemosaidlim/track-orders-app` 
+
+**Tags:**
+`v-slim` 
+
+**Instructions for Use:**
+-   Pull the image from Docker Hub:
+    `docker pull kubemosaidlim/track-orders-app:v-slim` 
+    
+-   Run the container:
+    `docker run -p 5000:5000 kubemosaidlim/track-orders-app:v-slim` 
+-   Access the application in the browser at [http://127.0.0.1:5000](http://127.0.0.1:5000/).
